@@ -1,0 +1,6 @@
+c87bd98 (HEAD -> main, tag: v0.1.0) docs(reports): record outputs of the first full run
+5d67995 feat(cli): training entry point and diagnostics script
+28d58d2 feat(model): leak-free pipeline, CV evaluation and threshold search
+1589844 feat(features): add engineered features with hand-checked tests
+ee1d83b feat(data): load, validate and clean raw customer data
+d7326e3 chore: project scaffold, config and sample-data generator

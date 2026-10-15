@@ -1,0 +1,39 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.16, pytest-9.1.1, pluggy-1.6.0 -- /usr/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/claude/w3/churn_week3
+plugins: anyio-4.15.1
+collecting ... collected 24 items
+
+tests/test_data.py::test_duplicates_removed PASSED                       [  4%]
+tests/test_data.py::test_blank_total_charges_for_new_customer_becomes_zero PASSED [  8%]
+tests/test_data.py::test_total_charges_is_numeric PASSED                 [ 12%]
+tests/test_data.py::test_contract_labels_standardised PASSED             [ 16%]
+tests/test_data.py::test_impossible_monthly_charge_becomes_nan PASSED    [ 20%]
+tests/test_data.py::test_target_is_binary_integer PASSED                 [ 25%]
+tests/test_data.py::test_clean_does_not_mutate_input PASSED              [ 29%]
+tests/test_data.py::test_missing_file_gives_clear_error PASSED           [ 33%]
+tests/test_data.py::test_missing_columns_detected PASSED                 [ 37%]
+tests/test_data.py::test_empty_file_detected PASSED                      [ 41%]
+tests/test_features.py::test_avg_monthly_spend_is_hand_computed PASSED   [ 45%]
+tests/test_features.py::test_zero_tenure_does_not_divide_by_zero PASSED  [ 50%]
+tests/test_features.py::test_addon_count PASSED                          [ 54%]
+tests/test_features.py::test_autopay_flag PASSED                         [ 58%]
+tests/test_features.py::test_missing_payment_method_is_handled PASSED    [ 62%]
+tests/test_features.py::test_tenure_group_boundaries PASSED              [ 66%]
+tests/test_features.py::test_input_not_modified PASSED                   [ 70%]
+tests/test_model.py::test_unknown_model_kind_rejected PASSED             [ 75%]
+tests/test_model.py::test_pipeline_fits_and_predicts_probabilities PASSED [ 79%]
+tests/test_model.py::test_no_nan_leaves_the_preprocessor PASSED          [ 83%]
+tests/test_model.py::test_unseen_category_does_not_crash PASSED          [ 87%]
+tests/test_model.py::test_same_seed_gives_identical_predictions PASSED   [ 91%]
+tests/test_model.py::test_model_beats_majority_baseline PASSED           [ 95%]
+tests/test_model.py::test_threshold_search_meets_recall_target PASSED    [100%]
+
+=============================== warnings summary ===============================
+tests/test_model.py::test_unseen_category_does_not_crash
+  /usr/local/lib/python3.13/dist-packages/sklearn/preprocessing/_encoders.py:262: UserWarning: Found unknown categories in columns [2] during transform. These unknown categories will be encoded as all zeros
+    warnings.warn(msg, UserWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 24 passed, 1 warning in 1.85s =========================

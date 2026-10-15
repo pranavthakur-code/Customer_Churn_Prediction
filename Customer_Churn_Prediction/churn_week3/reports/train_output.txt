@@ -1,0 +1,23 @@
+INFO Loaded 3035 rows, 13 columns from data/telco_churn_sample.csv
+INFO Dropped 35 duplicate rows
+INFO Set 6 impossible MonthlyCharges to NaN
+Train rows: 2400  Test rows: 600  Churn rate (train): 0.336
+
+Cross-validated comparison (training data only):
+                   roc_auc    std  recall  precision
+model                                               
+majority-baseline    0.500  0.000   0.000      0.000
+logistic C=0.1       0.771  0.012   0.732      0.540
+logistic C=1.0       0.770  0.012   0.733      0.543
+tree depth=3         0.741  0.017   0.742      0.499
+tree depth=6         0.700  0.022   0.660      0.488
+
+Selected model: logistic C=0.1   tuned threshold: 0.52
+Held-out test results:
+  roc_auc   0.809
+  recall    0.703
+  precision 0.609
+  f1        0.653
+  confusion  TN=307 FP=91 FN=60 TP=142
+
+Saved: reports/churn_pipeline.joblib, reports/run_metadata.json

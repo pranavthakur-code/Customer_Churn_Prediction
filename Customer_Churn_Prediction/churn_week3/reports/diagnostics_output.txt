@@ -1,0 +1,29 @@
+### A. Error handling
+missing file: DataValidationError: Data file not found: nope.csv
+unknown model: ValueError: Unknown model kind: 'svm-typo' (use 'logistic'/'tree')
+bad columns: DataValidationError: Missing required columns: ['gender', 'SeniorCitizen', 'Partner', 'Cont...
+
+### B. Sanity check: shuffled labels must score about 0.50
+ROC-AUC, 30 shuffled-label runs: mean 0.493  sd 0.071  (range 0.361-0.626)
+Real labels give 0.809 -> far outside the shuffled range
+
+### C. Over-fitting check: train vs held-out AUC
+tree depth=3  train=0.759 test=0.748 gap=+0.012
+tree depth=6  train=0.826 test=0.761 gap=+0.065
+tree depth=12 train=0.982 test=0.658 gap=+0.324
+
+### D. Missing-value stress test
+predictions made: 600  NaN in output: 0
+
+### E. Interpretation: logistic regression coefficients
+Contract_Month-to-month           1.051
+Contract_Two year                -0.902
+InternetService_Fiber optic       0.519
+InternetService_DSL              -0.415
+tenure                           -0.370
+PaymentMethod_Electronic check    0.274
+PaymentMethod_Mailed check       -0.242
+tenure_group_0-12                 0.230
+
+### F. Figure
+saved reports/fig_results.png
