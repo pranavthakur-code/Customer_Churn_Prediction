@@ -1,0 +1,131 @@
+Development set: 2400 rows (33.6% churn). Sealed test set: 600 rows (33.7% churn).
+
+### S1. Why accuracy alone misleads (development set, 5-fold OOF)
+                             accuracy  recall  precision  ROC-AUC
+Always 'stays' (majority)       0.664   0.000       0.00    0.500
+Logistic regression, t=0.50     0.700   0.732       0.54    0.771
+
+### S2. Full classification metric panel (OOF on development set)
+accuracy                  0.700
+balanced accuracy         0.708
+precision                 0.540
+recall                    0.732
+F1                        0.621
+F2 (recall-weighted)      0.683
+MCC                       0.395
+ROC-AUC                   0.771
+PR-AUC (avg precision)    0.615
+log loss                  0.573
+Brier score               0.196
+(PR-AUC of a random model = churn rate = 0.336)
+
+### S3. Regression metrics: predict MonthlyCharges
+                       MAE  MedianAE      MSE    RMSE     R2  MAPE %
+Mean-only baseline  23.339    23.344  686.852  26.208 -0.003  63.234
+Linear regression    5.828     4.570   54.405   7.376  0.921  12.642
+Effect of ONE extra 200-unit error on 581 test rows:
+  MAE  5.83 -> 6.17 (x1.06)
+  RMSE 7.38 -> 11.28 (x1.53)
+
+### S4. Diagnosing under- and over-fitting
+ depth  train_AUC  cv_AUC    gap
+     1      0.663   0.663 -0.000
+     2      0.729   0.720  0.010
+     3      0.762   0.741  0.021
+     4      0.785   0.737  0.048
+     6      0.842   0.700  0.142
+     8      0.914   0.650  0.264
+    10      0.966   0.627  0.339
+    14      0.998   0.608  0.390
+Learning curve, logistic regression:
+ n_train  train_AUC  cv_AUC
+     192      0.746   0.739
+     384      0.767   0.758
+     768      0.775   0.761
+    1152      0.779   0.767
+    1536      0.776   0.769
+    1920      0.780   0.771
+
+### S5. Validation strategies compared (development set only)
+                  strategy  fits per estimate  estimates  mean AUC  sd across seeds       range
+     Single 80/20 hold-out                  1         30    0.7669           0.0185 0.724-0.805
+      5-fold stratified CV                  5         30    0.7703           0.0015 0.767-0.773
+5x5 repeated stratified CV                 25         10    0.7702           0.0006 0.769-0.771
+
+Stratification on a small imbalanced sample (200 rows, 20 churners):
+  plain KFold(5, shuffle)  churners per validation fold: [4, 5, 4, 4, 3]
+  StratifiedKFold(5)       churners per validation fold: [4, 4, 4, 4, 4]
+
+Nested CV vs naive tuning (decision tree, grid of 27 settings):
+  best params (naive): {'model__max_depth': 3, 'model__min_samples_leaf': 1}
+  naive best CV AUC (used to pick AND report): 0.744
+  nested CV AUC (outer folds never used for tuning): 0.743 +/- 0.035
+  optimism of naive estimate: +0.001
+
+### S6. Choosing the decision threshold from out-of-fold predictions
+Rule                                   threshold  precision  recall   F1
+Default 0.50                               0.50      0.540   0.732  0.621
+Max F1                                     0.50      0.540   0.732  0.621
+Max precision s.t. recall>=70%             0.51      0.543   0.716  0.618
+Min cost (FN=5x FP)                        0.28      0.426   0.934  0.585
+
+### S7. Final, one-time evaluation on the sealed test set
+Threshold 0.51 chosen on out-of-fold training predictions (not in-sample)
+ROC-AUC 0.809 | recall 0.728 | precision 0.605 | F1 0.661 | accuracy 0.748
+Confusion matrix: TN=302 FP=96 FN=55 TP=147
+Per-class rates: false-positive rate 0.241 | false-negative rate 0.272 | specificity 0.759
+Bootstrap 95% confidence intervals (1,000 resamples of the test set):
+  ROC-AUC    0.773 - 0.844
+  recall     0.665 - 0.786
+  precision  0.538 - 0.665
+
+### S8. Error analysis
+Overall error rate: 0.252
+                                segment   n  churn %  error %  recall  FP count  FN count
+                Contract=Month-to-month 299     51.2     34.8    0.84        80        24
+                      Contract=One year 138     24.6     24.6    0.44        15        19
+                      Contract=Two year 163      9.2      8.0    0.20         1        12
+                    InternetService=DSL 198     24.2     23.2    0.52        23        23
+            InternetService=Fiber optic 276     44.6     28.3    0.87        62        16
+                     InternetService=No 126     24.6     21.4    0.48        11        16
+                      tenure_group=0-12 149     41.6     28.9    0.90        37         6
+                     tenure_group=13-24 144     39.6     33.3    0.77        35        13
+                     tenure_group=25-48 190     32.1     22.6    0.54        15        28
+                     tenure_group=49-72 117     18.8     14.5    0.64         9         8
+PaymentMethod=Bank transfer (automatic) 123     26.0     22.8    0.75        20         8
+  PaymentMethod=Credit card (automatic) 131     31.3     21.4    0.68        15        13
+         PaymentMethod=Electronic check 197     39.1     27.9    0.74        35        20
+             PaymentMethod=Mailed check 141     34.0     27.0    0.71        24        14
+Segments with highest error rate (n>=40): ['Contract=Month-to-month', 'tenure_group=13-24', 'tenure_group=0-12']
+
+Five most confident mistakes:
+            Contract InternetService  tenure  MonthlyCharges  y     p
+2344        Two year             DSL      33           47.10  1  0.09
+1506  Month-to-month     Fiber optic       6           85.21  0  0.90
+562         Two year              No      49           19.59  1  0.10
+2973        Two year             DSL      31           46.17  1  0.10
+2585        Two year              No      33           24.44  1  0.11
+
+Calibration (10 equal-count bins):
+ mean predicted  observed churn rate
+          0.085                0.067
+          0.155                0.050
+          0.230                0.083
+          0.321                0.150
+          0.395                0.183
+          0.470                0.400
+          0.559                0.517
+          0.634                0.633
+          0.723                0.550
+          0.830                0.733
+                      Brier   log loss   ROC-AUC
+Uncalibrated         0.177    0.531      0.809
+Sigmoid-calibrated   0.168    0.503      0.809
+Mean predicted churn: uncalibrated 0.440, calibrated 0.317, actual 0.337
+
+### S9. Is model A really better than model B? (paired comparison, 5x3 CV)
+Logistic AUC 0.772 | Tree(depth 3) AUC 0.743 | mean paired difference +0.029 (sd 0.011)
+Logistic wins in 15 of 15 paired folds
+Logistic C=0.1 vs C=1.0: mean difference +0.0005 (sd 0.0015), C=0.1 wins 8 of 15 folds
+
+Done. Figures saved to reports/.

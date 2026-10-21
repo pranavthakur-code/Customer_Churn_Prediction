@@ -1,0 +1,24 @@
+threshold              0.510
+accuracy               0.748
+balanced_accuracy      0.743
+precision              0.605
+recall                 0.728
+f1                     0.661
+mcc                    0.468
+roc_auc                0.809
+pr_auc                 0.641
+log_loss               0.531
+brier                  0.177
+tn                   302.000
+fp                    96.000
+fn                    55.000
+tp                   147.000
+
+ROC-AUC 0.809  95% CI [0.772, 0.844]
+Recall  0.728  95% CI [0.667, 0.784]
+
+Worst slices by error rate:
+                segment   n  positive_rate  error_rate  recall  fp  fn
+Contract=Month-to-month 299          0.512       0.348   0.843  80  24
+      Contract=One year 138          0.246       0.246   0.441  15  19
+      Contract=Two year 163          0.092       0.080   0.200   1  12
