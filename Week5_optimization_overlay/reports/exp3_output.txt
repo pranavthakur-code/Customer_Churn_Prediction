@@ -1,0 +1,20 @@
+### E3-A. Nested cross-validation (5 outer folds x [25 random trials x 3 inner folds])
+ fold  inner_best_CV  tuned_HGB  default_HGB  logistic_C0.1
+    1         0.7592     0.7703       0.7376         0.7732
+    2         0.7745     0.7438       0.7211         0.7477
+    3         0.7764     0.7216       0.6948         0.7369
+    4         0.7656     0.7796       0.7123         0.7894
+    5         0.7435     0.8055       0.7710         0.8078
+Mean over outer folds: {'inner_best_CV': 0.7639, 'tuned_HGB': 0.7642, 'default_HGB': 0.7274, 'logistic_C0.1': 0.771}
+Optimism of the tuning score (inner best minus outer score): -0.0003
+Tuned HGB minus default HGB:  mean +0.0368, wins 5/5
+Tuned HGB minus logistic:     mean -0.0068, wins 0/5
+
+### E3-B. Final comparison on the sealed test set (used once)
+Chosen from development CV only (best Optuna trial): {'learning_rate': 0.0377, 'max_depth': 2, 'min_samples_leaf': 11, 'l2_regularization': 2.9364} | CV AUC 0.7715
+                            threshold ROC-AUC   AUC 95% CI PR-AUC recall precision    F1 Brier  FN   FP
+Logistic (Week 3 baseline)      0.510   0.809  0.772-0.844  0.641  0.728     0.605 0.661 0.177  55   96
+Gradient boosting, defaults     0.270   0.761  0.722-0.800  0.611  0.723     0.525 0.608 0.186  56  132
+Gradient boosting, tuned        0.350   0.799  0.762-0.835  0.626  0.713     0.600 0.652 0.172  58   96
+Paired bootstrap, AUC(tuned GBM) - AUC(logistic) on the test set: -0.0098, 95% CI [-0.0192, -0.0011]
+Cost of the search: 1296 trials, 825 s of evaluation time

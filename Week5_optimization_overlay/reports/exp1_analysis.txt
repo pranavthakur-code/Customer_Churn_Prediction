@@ -1,0 +1,37 @@
+### E1-A. Best CV ROC-AUC found with 81 evaluations (5 seeds for stochastic methods)
+        method  runs  mean best     sd  worst run  best run  trials to reach within 0.003 of overall best (median) runs reaching it  sec/trial  % trials above defaults
+   Grid search     1     0.7712    NaN     0.7712    0.7712                                                    5.0          300/300     0.6080                  83.9506
+ Random search     5     0.7700 0.0010     0.7685    0.7709                                                   24.0              5/5     0.7724                  84.1975
+  Optuna (TPE)     5     0.7714 0.0001     0.7712    0.7715                                                   12.0              5/5     0.4897                  98.0247
+Hyperopt (TPE)     5     0.7713 0.0001     0.7711    0.7714                                                   21.0              5/5     0.6533                  94.0741
+Overall best CV AUC seen in any trial: 0.7715
+References: library-default gradient boosting 0.7311; untuned logistic regression (C=0.1) 0.7714
+
+### E1-B. Best configurations overall
+      method  learning_rate  max_depth  min_samples_leaf  l2_regularization  cv_auc  cv_std
+  optuna_tpe         0.0377          2                11             2.9364  0.7715  0.0131
+  optuna_tpe         0.0330          2                31             0.0840  0.7714  0.0135
+  optuna_tpe         0.0313          2                28             0.0019  0.7714  0.0138
+  optuna_tpe         0.0325          2                14             1.1083  0.7714  0.0133
+hyperopt_tpe         0.0318          2                35             0.0078  0.7714  0.0132
+  optuna_tpe         0.0339          2                27             0.0440  0.7714  0.0133
+
+Optuna parameter importance (fANOVA, seed-0 study): {'learning_rate': 0.571, 'min_samples_leaf': 0.204, 'l2_regularization': 0.132, 'max_depth': 0.094}
+Total trials: 1296, total evaluation time 825 s (0.64 s per trial)
+Trials scoring below defaults (0.7311): 8.4% of all
+Trials scoring above untuned logistic (0.7714): 1 of 1296
+
+### E1-C. Why do the methods differ? Share of trials landing near the optimum
+Within 0.003 of the overall best (0.7715):
+  Grid search      11.1% of trials
+  Random search     3.2% of trials
+  Optuna (TPE)     59.8% of trials
+  Hyperopt (TPE)   16.5% of trials
+Within 0.001 of the overall best (0.7715):
+  Grid search       6.2% of trials
+  Random search     1.0% of trials
+  Optuna (TPE)     35.1% of trials
+  Hyperopt (TPE)    4.9% of trials
+Grid points with max_depth=2 and learning_rate=0.03: 9 of 81 (CV AUC 0.7702-0.7712)
+Share of trials with max_depth=2: {'Random search': 0.06, 'Optuna (TPE)': 0.66, 'Hyperopt (TPE)': 0.22}
+saved fig_convergence.png

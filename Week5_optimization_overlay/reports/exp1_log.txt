@@ -1,0 +1,8 @@
+Reference (no tuning), 5-fold CV ROC-AUC: {'hgb_default': 0.7311, 'logistic_C0.1': 0.7714}
+grid done 52s
+seed 0 done 205s
+seed 1 done 361s
+seed 2 done 512s
+seed 3 done 673s
+seed 4 done 832s
+Done in 832s

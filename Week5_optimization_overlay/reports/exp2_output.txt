@@ -1,0 +1,40 @@
+### A. Logistic regression: sensitivity to C (5-fold CV, development data)
+       C  train_AUC  cv_AUC  cv_sd
+  0.0010     0.7437  0.7377 0.0156
+  0.0032     0.7614  0.7542 0.0155
+  0.0100     0.7742  0.7674 0.0147
+  0.0316     0.7786  0.7706 0.0140
+  0.1000     0.7797  0.7714 0.0123
+  0.3162     0.7800  0.7710 0.0117
+  1.0000     0.7800  0.7704 0.0115
+  3.1623     0.7799  0.7704 0.0115
+ 10.0000     0.7799  0.7703 0.0115
+ 31.6228     0.7799  0.7703 0.0115
+100.0000     0.7799  0.7703 0.0115
+Spread of CV AUC for C between 0.01 and 10: 0.0041
+
+### B. Boosting rounds: when does adding trees start to hurt?
+Validation log loss is lowest at 20 rounds (0.558); at 400 rounds it is 0.662 while training loss is 0.225
+Built-in early stopping (patience 10) stopped at 43 rounds; held-out AUC 0.743 vs 0.699 for 400 rounds
+
+### C. The winner's curse: re-scoring the best configurations on fresh folds
+      method  original_cv  fresh_cv    drop
+  optuna_tpe       0.7715    0.7688 -0.0027
+  optuna_tpe       0.7714    0.7685 -0.0029
+  optuna_tpe       0.7714    0.7683 -0.0031
+  optuna_tpe       0.7714    0.7685 -0.0029
+hyperopt_tpe       0.7714    0.7684 -0.0030
+  optuna_tpe       0.7714    0.7684 -0.0029
+  optuna_tpe       0.7714    0.7685 -0.0029
+hyperopt_tpe       0.7713    0.7682 -0.0031
+Mean drop on fresh folds: -0.0029
+
+One-standard-error rule (Optuna, seed 0): best 0.7714 (SE 0.0061, depth 2, lr 0.033)
+  simplest config within 1 SE: AUC 0.7666, depth 2, lr 0.014, min_leaf 97  (69 configs qualify)
+
+### D. Which hyper-parameters matter? (from the 405 random-search trials and the 81-point grid)
+  mean CV AUC by learning_rate      {0.03: 0.7625, 0.1: 0.7517, 0.3: 0.7359}
+  mean CV AUC by max_depth          {2: 0.7631, 4: 0.7477, 6: 0.7392}
+  mean CV AUC by min_samples_leaf   {10: 0.7473, 30: 0.7494, 90: 0.7533}
+  mean CV AUC by l2_regularization  {0.01: 0.7485, 0.3: 0.7481, 10.0: 0.7534}
+saved figures

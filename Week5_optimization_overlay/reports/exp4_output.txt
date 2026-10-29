@@ -1,0 +1,9 @@
+### E4. Successive halving (81 candidates, factor 3, resource = training rows)
+Rounds: 3
+Candidates per round: [81, 27, 9]
+Training rows per round: [100, 300, 900]
+Total CV fits: 585 (random search with 81 trials = 405 fits)
+Wall-clock: 31.4 s
+Best configuration: {'l2_regularization': 0.0013, 'learning_rate': 0.0203, 'max_depth': 2, 'min_samples_leaf': 66}
+Re-scored on the full development set with the same folds: CV AUC 0.7691 (sd 0.0134)
+Random search, seed 0, 81 trials: best CV AUC 0.7709, 60.3 s of evaluation time
